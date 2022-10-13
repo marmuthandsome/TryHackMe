@@ -15,17 +15,14 @@ Access the website first.
 
 `nmap -sC -sV -p- -T4 [TARGET_IP]`
 
--sC = Run the default script.
-
--sV = Version of services.
-
--p- = Checking for all port.
-
--T4 = Scanning speed.
+- sC = Run the default script.
+- sV = Version of services.
+- -p- = Checking for all port.
+- T4 = Scanning speed.
 
 <img src="https://user-images.githubusercontent.com/67650329/195094779-0e988887-6eca-4041-adb9-d30f9e5c143d.png" width="500px" align="center">
 
-`gobuster dir -u 10.10.128.42 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -f -n`
+`gobuster dir -u [TARGET_IP] -w [WORDLIST] -f -n`
 
 - u = Url/Link Target.
 - w = Wordlist to use.
