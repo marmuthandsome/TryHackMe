@@ -56,7 +56,7 @@ We can download the file `archive.tar` on /admin/ page.
 
 I found another page on `/etc/squid/passwd`
 
-<img src="https://user-images.githubusercontent.com/67650329/195514435-4fdd1dd0-f577-4cae-95f0-aed7908023fe.png" width="300px" align="center">
+<img src="https://user-images.githubusercontent.com/67650329/195514435-4fdd1dd0-f577-4cae-95f0-aed7908023fe.png" width="500px" align="center">
 
 Now we must cracked the hash. Use `hashcat` tools.
 
