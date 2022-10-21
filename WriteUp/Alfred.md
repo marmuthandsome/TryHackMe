@@ -23,7 +23,7 @@ This is the result for the scanning with nmap tools.
 
 **How many ports are open? (TCP only)**
 
-**Anwer: 3**
+**Answer: 3**
 
 This is the login page for this website.
 
