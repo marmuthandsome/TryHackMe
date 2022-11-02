@@ -10,6 +10,11 @@ In the weekly internal security meeting, it was reported that an employee overhe
 
 ---
 
+**Tools**
+
+- ProcDOT
+- FullEventLogView
+
 **Note: Use the `FullEventLogView tool`. Go to `Options > Advanced Options` and `set Show events from all times`**
 
 **1. The user downloaded a zip file. What was the zip file saved as?** 
