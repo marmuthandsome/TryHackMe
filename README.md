@@ -1,3 +1,8 @@
+## 👻 Hackerween Event | WriteUp
+<img src="https://blog.tryhackme.com/content/images/2022/10/Happy-Hackerween-imagery.png" width="500px" align="center">
+
+**Link to Writeup : [Click Here](https://github.com/nieshakenzie/TryHackMe/tree/main/Hackerween)**
+
 ## 📝 TryHackMe | WriteUp
 
 |No|Name|Link|
