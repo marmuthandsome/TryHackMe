@@ -12,11 +12,8 @@ Let's Go.
 `nmap -sC -sV -p- -T4 {IP}`
 
 - -sC = Run the default script.
-
 - -sV = Version of services.
-
 - -p- = Checking for all port.
-
 - -T4 = Scanning speed.
 
 This is the result for the scanning with nmap tools.
