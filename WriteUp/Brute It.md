@@ -130,7 +130,7 @@ We got the directory to exploit `/bin/cat`
 We can use [gtfobinds](https://gtfobins.github.io/gtfobins/cat/) to exploit the directory.
 ```
 john@bruteit:/$ sudo cat /etc/shadow
-root:$6$zdk0.jUm$Vya24cGzM1duJkwM5b17Q205xDJ47LOAg/OpZvJ1gKbLF8PJBdKJA4a6M.JYPUTAaWu4infDjI88U9yUXEVgL.:18490:0:99999:7:::
+root:$6$zdk0.j***L.:18490:0:99999:7:::
 daemon:*:18295:0:99999:7:::
 …
 …
