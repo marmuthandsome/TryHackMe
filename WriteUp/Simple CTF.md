@@ -69,7 +69,7 @@ What's the user flag?
 
 **Answer: G00d j0b, keep up!**
 
-<img src="https://user-images.githubusercontent.com/67650329/189663407-23626ccd-3581-4794-b378-6850ebf88911.png" width="500px" align="center">
+<img src="https://github.com/nieshakenzie/TryHackMe/assets/67650329/affeb5e8-1e80-49bf-9baa-7abb0ba0cfb1" width="500px" align="center">
 
 Is there any other user in the home directory? What's its name?
 
